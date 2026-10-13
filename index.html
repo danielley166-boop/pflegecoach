@@ -65,7 +65,9 @@ details p{margin:0 0 14px;color:var(--mut)}
 footer{padding:36px 0;border-top:1px solid var(--bd);color:var(--mut);font-size:14px}
 footer p{margin:0 0 8px}
 .note{border-left:4px solid var(--pri);background:var(--soft);border-radius:0 10px 10px 0;padding:12px 16px;font-size:15px;margin-top:18px}
-@media (max-width:820px){.hero .wrap,.dl{grid-template-columns:1fr}.g3,.shots{grid-template-columns:1fr}.g2{grid-template-columns:1fr}h1{font-size:32px}.nav a.l{display:none}.hero{padding:40px 0 32px}section{padding:44px 0}}
+.mhint{display:none;border-left:4px solid var(--pri);background:var(--soft);border-radius:0 10px 10px 0;padding:12px 14px;font-size:15px;margin:0 0 16px}
+.mhint b{display:block}.mhint .btn{margin-top:10px}
+@media (max-width:820px){.mhint{display:block}.hero .wrap,.dl{grid-template-columns:1fr}.g3,.shots{grid-template-columns:1fr}.g2{grid-template-columns:1fr}h1{font-size:32px}.nav a.l{display:none}.hero{padding:40px 0 32px}section{padding:44px 0}}
 </style>
 </head>
 <body>
@@ -84,6 +86,7 @@ footer p{margin:0 0 8px}
    <a class="btn" href="downloads/PflegeCoach-Setup.exe" download>⬇ Installer herunterladen</a>
    <a class="btn g" href="#download">Alle Downloads &amp; Prüfsummen</a>
   </div>
+  <div class="mhint"><b>Auf dem Handy unterwegs?</b>PflegeCoach läuft nur auf Windows-PCs (Windows 10/11), nicht auf Handy oder Tablet. Öffne diese Seite am PC, um den Installer herunterzuladen.<br><button class="btn g s" id="sharebtn" type="button">Link an den PC schicken</button></div>
   <div class="meta">Version 1.0 · Stand 13.10.2026 · Windows-Installer, 294 KB · ohne Administratorrechte</div>
  </div>
  <div class="frame"><div class="bar"><i></i><i></i><i></i></div><img src="img/uebersicht.png" alt="Übersicht in PflegeCoach mit Lernkarten, Quiz-Ergebnis und Stundennachweis"></div>
@@ -128,6 +131,7 @@ footer p{margin:0 0 8px}
 <section id="download"><div class="wrap">
  <h2>Download</h2>
  <p class="sub">Version 1.0 · für Windows 10 und 11 (64-Bit). Empfohlen ist der Installer.</p>
+ <div class="mhint"><b>Hinweis:</b>Diese Downloads sind für Windows-PCs, nicht für Handy oder Tablet.</div>
  <div class="dl">
   <div class="card">
    <span class="tag">Empfohlen</span>
@@ -188,6 +192,13 @@ footer p{margin:0 0 8px}
 </div></footer>
 
 <script>
+(function(){var sb=document.getElementById("sharebtn");if(!sb)return;
+ sb.addEventListener("click",function(){var u=location.href.split("#")[0],old=sb.textContent;
+  function done(m){sb.textContent=m;setTimeout(function(){sb.textContent=old},2200)}
+  try{if(navigator.share){navigator.share({title:"PflegeCoach",text:"PflegeCoach – Lernen für die Pflegeausbildung (für Windows-PC)",url:u}).catch(function(){})}
+  else{navigator.clipboard.writeText(u).then(function(){done("Link kopiert ✓")},function(){done("Bitte Adresse manuell kopieren")})}}
+  catch(e){done("Bitte Adresse manuell kopieren")}});
+})();
 document.querySelectorAll("[data-copy]").forEach(function(b){
  b.addEventListener("click",function(){
   var t=document.getElementById(b.dataset.copy).textContent.trim(),old=b.textContent;
