@@ -65,9 +65,19 @@ details p{margin:0 0 14px;color:var(--mut)}
 footer{padding:36px 0;border-top:1px solid var(--bd);color:var(--mut);font-size:14px}
 footer p{margin:0 0 8px}
 .note{border-left:4px solid var(--pri);background:var(--soft);border-radius:0 10px 10px 0;padding:12px 16px;font-size:15px;margin-top:18px}
+.shots img,.frame img{cursor:zoom-in}
+.shots img:focus-visible,.frame img:focus-visible{outline:3px solid var(--pri);outline-offset:2px}
+.lb{position:fixed;inset:0;z-index:50;background:#060b0c;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px;color-scheme:dark}
+.lb[hidden]{display:none}
+.lbbox{max-width:100%;max-height:calc(100vh - 120px);overflow:auto;border-radius:10px;-webkit-overflow-scrolling:touch}
+.lb img{display:block;width:auto;height:auto;max-width:96vw;max-height:calc(100vh - 130px);cursor:default}
+.lbc{color:#dfe9ec;font-size:14px;margin:12px 0 0;text-align:center;max-width:720px}
+.lbh{display:none;color:#9bb0b8;font-size:13px;margin:4px 0 0}
+.lbx{position:absolute;top:10px;right:12px;width:44px;height:44px;border-radius:50%;border:1px solid #ffffff55;background:#000000aa;color:#fff;font-size:20px;cursor:pointer}
+.lbx:hover{background:#000}
 .mhint{display:none;border-left:4px solid var(--pri);background:var(--soft);border-radius:0 10px 10px 0;padding:12px 14px;font-size:15px;margin:0 0 16px}
 .mhint b{display:block}.mhint .btn{margin-top:10px}
-@media (max-width:820px){.mhint{display:block}.hero .wrap,.dl{grid-template-columns:1fr}.g3,.shots{grid-template-columns:1fr}.g2{grid-template-columns:1fr}h1{font-size:32px}.nav a.l{display:none}.hero{padding:40px 0 32px}section{padding:44px 0}}
+@media (max-width:820px){.lb img{width:1184px;max-width:none;max-height:none}.lbh{display:block}.mhint{display:block}.hero .wrap,.dl{grid-template-columns:1fr}.g3,.shots{grid-template-columns:1fr}.g2{grid-template-columns:1fr}h1{font-size:32px}.nav a.l{display:none}.hero{padding:40px 0 32px}section{padding:44px 0}}
 </style>
 </head>
 <body>
@@ -103,7 +113,8 @@ footer p{margin:0 0 8px}
   <div class="card"><div class="ic">📊</div><h3>Noten</h3><p>Noten mit Gewichtung erfassen und den Durchschnitt im Blick behalten.</p></div>
   <div class="card"><div class="ic">🧮</div><h3>Rechner &amp; Normwerte</h3><p>BMI, Tropfenrate und Dosisberechnung zum Üben – dazu eine Tabelle mit Normwerten für Puls, Blutdruck, Temperatur und mehr.</p></div>
  </div>
- <div class="shots" style="margin-top:36px">
+ <p class="meta" style="margin:36px 0 12px">🔍 Tippe oder klicke auf ein Bild, um es zu vergrößern.</p>
+ <div class="shots">
   <figure><img src="img/lernkarten.png" alt="Lernkarte mit Antwortseite" loading="lazy"><figcaption>Lernkarten mit „Gewusst / Nicht gewusst“</figcaption></figure>
   <figure><img src="img/quiz.png" alt="Quizfrage mit vier Antworten" loading="lazy"><figcaption>Quiz mit Erklärung nach jeder Frage</figcaption></figure>
   <figure><img src="img/berichtsheft.png" alt="Berichtsheft mit Eintrag und Stundensumme" loading="lazy"><figcaption>Berichtsheft mit Stundensumme</figcaption></figure>
@@ -191,7 +202,25 @@ footer p{margin:0 0 8px}
  <p>Quellen der Stundenzahlen: Pflegeberufegesetz (Pflegefachkraft) · <a href="https://www.bibb.de/pub-pflegefachassistenzausbildung-aktuell">BIBB: Pflegefachassistenzausbildung aktuell</a> · <a href="https://medi-karriere.de/medizinische-berufe/pflegehelfer">Medi-Karriere: Pflegehelfer</a></p>
 </div></footer>
 
+<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Screenshot vergrößert">
+ <button class="lbx" type="button" aria-label="Schließen">✕</button>
+ <div class="lbbox"><img alt=""></div>
+ <p class="lbc"></p>
+ <p class="lbh">Zum Verschieben wischen · Handy quer halten hilft · ✕ zum Schließen</p>
+</div>
+
 <script>
+(function(){var lb=document.getElementById("lb"),li=lb.querySelector("img"),cap=lb.querySelector(".lbc"),x=lb.querySelector(".lbx"),last=null;
+ function open(i){last=document.activeElement;li.src=i.currentSrc||i.src;li.alt=i.alt;cap.textContent=i.alt;lb.hidden=false;document.body.style.overflow="hidden";lb.querySelector(".lbbox").scrollTo(0,0);x.focus()}
+ function close(){lb.hidden=true;li.removeAttribute("src");document.body.style.overflow="";if(last&&last.focus)last.focus()}
+ document.querySelectorAll(".shots img,.frame img").forEach(function(i){
+  i.setAttribute("tabindex","0");i.setAttribute("role","button");i.setAttribute("aria-label","Vergrößern: "+i.alt);
+  i.addEventListener("click",function(){open(i)});
+  i.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();open(i)}});
+ });
+ lb.addEventListener("click",function(e){if(e.target===lb||e.target===x)close()});
+ document.addEventListener("keydown",function(e){if(lb.hidden)return;if(e.key==="Escape")close();else if(e.key==="Tab"){e.preventDefault();x.focus()}});
+})();
 (function(){var sb=document.getElementById("sharebtn");if(!sb)return;
  sb.addEventListener("click",function(){var u=location.href.split("#")[0],old=sb.textContent;
   function done(m){sb.textContent=m;setTimeout(function(){sb.textContent=old},2200)}
